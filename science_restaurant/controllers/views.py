@@ -6,7 +6,11 @@ from django.shortcuts import render, redirect
 
 
 def home(request):  # HttpRequest
-    return HttpResponse("<h1>Страница приложения Home page </h1>")
+    return render(request, 'restaurant/home.html')
+
+
+# def home(request):  # HttpRequest
+#     return HttpResponse("<h1>Страница приложения Home page </h1>")
 
 
 def index(request, index_id):  # HttpRequest
@@ -42,8 +46,8 @@ def page_not_found(request, exception):
 
 def redirect_301(request, month):
     if int(month) > 9:
-        return redirect('redirect_path', permanent=True)  # Всегда
-        # return redirect('/')  # Времено
+        # return redirect('main', permanent=False)  # Всегда
+        return redirect('/')  # Времено
     return HttpResponse(f"<h1>Архив по месяцам </h1> <h2>{month}</h2>")
 
 

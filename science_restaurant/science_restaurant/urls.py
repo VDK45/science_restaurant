@@ -22,8 +22,8 @@ from science_restaurant import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home),
-    path('science_restaurant/', include('controllers.urls')),
+    # path('', home,),
+    path('', include('controllers.urls')),
 ]
 
 if settings.DEBUG:
