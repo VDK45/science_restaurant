@@ -1,12 +1,9 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect
+from .models import *
 
 
 # Create your views here.
-
-
-def home(request):  # HttpRequest
-    return render(request, 'restaurant/home.html')
 
 
 # def home(request):  # HttpRequest
@@ -46,10 +43,20 @@ def page_not_found(request, exception):
 
 def redirect_301(request, month):
     if int(month) > 9:
-        # return redirect('main', permanent=False)  # Всегда
-        return redirect('/')  # Времено
+        return redirect('re_main', permanent=False)  # Всегда
+        # return redirect('/')  # Времено
     return HttpResponse(f"<h1>Архив по месяцам </h1> <h2>{month}</h2>")
 
 
+# base.html
+menu = ['About restaurant', 'Add news', 'Feedback', 'Longin']
 
+
+def home(request):  # HttpRequest
+    posts = Visitor.objects.all()  # Connect to BD
+    return render(request, 'restaurant/home.html', {'posts': posts, 'menu': menu, 'title': 'Home page'})
+
+
+def about_us(request):
+    return render(request, 'restaurant/about.html', {'menu': menu, 'title': 'About US'})
 
