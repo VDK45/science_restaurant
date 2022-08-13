@@ -1,0 +1,9 @@
+#  in console & DEBUG = True:
+python manage.py collectstatic
+
+* STATIC_URL - Префикс url-адреса  для стаических файлов
+* STATIC_ROOT - Путь к общей статичесой папке используемой реальным веб-сервером
+* STATICFILES_DIRS - Список доп(нестандартных) путей к статическим файлам, используемых для режима DEBUG
+
+
+
