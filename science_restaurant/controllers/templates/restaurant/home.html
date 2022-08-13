@@ -1,16 +1,18 @@
+
+
 {% extends 'restaurant/base.html' %}
 
 {% block content %}
-<h1>{{title}}</h1>
-
-<ul>
-    {% for p in posts %}
-    <li>
-        <h2>{{p.nik_name}}</h2>
-        <p>{{p.about}}</p>
-        <hr>
-    </li>
-    {% endfor %}
+<ul class="list-articles">
+	{% for p in posts %}
+			<li><h2>{{p.nik_name}}</h2>
+            <p>{{p.about|linebreaks|truncatewords:50}}</p>
+	{% autoescape on %}
+	{{p.content|linebreaks|truncatewords:50}}
+	{% endautoescape %}
+			<div class="clear"></div>
+			<p class="link-read-post"><a href="#">Читать пост</a></p>
+			</li>
+	{% endfor %}
 </ul>
-
 {% endblock %}
