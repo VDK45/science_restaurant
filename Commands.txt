@@ -1,3 +1,239 @@
+--------- Django ------------ # https://www.djangoproject.com/
+
+# В папке для сайта создать виртуалное окружения (venv):
+python -m venv venv
+
+# Запуск venv windows:
+.\venv\Scripts\activate
+# Запуск venv Linux:
+source venv\bin\activate
+
+# Проверка пакетов:
+pip list   # Только 2 пакета.
+
+# Выйти из виртуалного окружения.
+deactivate
+
+# Open Pycharm - open project
+# File - setting - (Project name) - Python interpreteter
+
+# Open terminal - choose PowerShell
+pip install django
+
+django-admin
+
+django-admin startproject <name_site>  # <name_site> as name_site.com
+
+cd <name_site>
+
+python manage.py runserver  # Start standard server
+python manage.py runserver 4444 # Port 4444
+python manage.py runserver 192.168.0.1:4444
+
+# CTRL + C -- stop server
+
+# Create new app
+python manage.py startapp controllers # controllers = app name
+
+# Open file: controllers/setting.py add new INSTALLED_APPS ('controllers.apps.ControllersConfig')
+# Create Views: controllers/views.py
+
+from django.http import HttpResponse
+
+def home(request):  # HttpRequest
+    return HttpResponse("<h1>Страница приложения Home page </h1>")
+
+def index(request):  # HttpRequest
+    return HttpResponse("<h1>Страница приложения Index </h1>")
+
+def categories(request):
+    return HttpResponse("<h1>Страница приложения Categories </h1>")
+
+# <name_site>.urls.py add new url
+from django.urls import path, include
+from controllers.views import *
+
+# Mark directory <name_site> as Source Root
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', home),  # http://127.0.0.1:8000/
+    path('index/', index),  # http://127.0.0.1:8000/index/
+    path('categories/', categories),  # http://127.0.0.1:8000/categories/
+]
+
+---------------------------------------------------------------------
+
+# controllers.views.py
+
+from django.http import HttpResponse
+from django.shortcuts import render
+
+# Create your views here.
+
+
+def home(request):  # HttpRequest
+    return HttpResponse("<h1>Страница приложения Home page </h1>")
+
+
+def index(request):  # HttpRequest
+    return HttpResponse("<h1>Страница приложения Index </h1>")
+
+
+def categories(request):
+    return HttpResponse("<h1>Страница приложения Categories </h1>")
+
+# <name_site>.urls.py:
+
+from django.contrib import admin
+from django.urls import path, include
+
+from controllers.views import *
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('science_restaurant/', include('controllers.urls')),
+]
+
+# Add new file controllers.urls.py
+
+from django.urls import path
+from .views import *
+
+urlpatterns = [
+    path('', home),
+    path('index/', index),  # http://127.0.0.1:8000/index/
+    path('categories/', categories),  # http://127.0.0.1:8000/categories/
+]
+
+# Pillow
+python -m pip install Pillow
+
+# Migration
+python manage.py makemigrations
+
+# Show SQL command for create Table DB
+python manage.py sqlmigrate visitor 0001
+
+# Migrate
+python manage.py migrate
+
+
+# ----------- CRUD ----------
+# ----------- Add data in base ----------
+
+
+# Using Interactive Console
+python manage.py shell
+
+from controllers.models import Visitor
+
+# Create visitor
+Visitor(nik_name='Barack Obama', about='President USA')
+v1 = _  # last action
+
+# Commit to base
+v1.save()
+
+# PK
+v1.pk  # = v1.id
+
+# Show command:
+from django.db import connection
+connection.queries
+
+# Create visitor
+v2 = Visitor(nik_name='Michael Jackson', about='Wolrd actor')
+v2.save()
+
+# Create visitor
+v3 = Visitor()
+v3.nik_name = 'Elon Mask'
+v3.about = 'Billionaire USA'
+v3.save()
+
+# Object - Manage write
+Visitor.objects
+
+# v4 ADDED
+v4 = Visitor.objects.create(nik_name='JanCloud Vandam', about='Old Actor')
+
+
+# v5
+Visitor.objects.create(nik_name='Jackie Chan', about='Actor China')
+
+# Show objects
+Visitor.objects.all()
+
+# Переопределять метод __str__ class Visitor
+    class Visitor(models.Model):
+        nik_name = models.CharField(max_length=255)
+        about = models.TextField(blank=True)
+        photo = models.ImageField(upload_to="photos/%Y/%m/%d/")
+        time_create = models.DateTimeField(auto_now_add=True)
+        time_update = models.DateTimeField(auto_now=True)
+        is_published = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nik_name, self.about
+
+# Restart Shell
+exit()
+python manage.py shell
+
+from controllers.models import Visitor
+Visitor.objects.all()
+
+list = _
+list[0]  # Obama
+
+for lst in list:
+    print(lst.nik_name)
+
+Visitor.objects.filter(nik_name='Barack Obama')
+
+from django.db import connection
+connection.queries   # Все запросы к базе данных
+
+# Find by pk(id = 3, about='Billionaire USA')
+Visitor.objects.filter(pk=3, about='Billionaire USA')
+
+# Find by pk(id >= 2)
+Visitor.objects.filter(pk__gte=2)
+
+# Find by pk(id <= 2)
+Visitor.objects.filter(pk__lte=2)
+
+# Не включено (id = 2)
+Visitor.objects.exclude(pk=2)
+
+# get method - Получим только одну запись всегда
+Visitor.objects.get(pk=2)
+
+Visitor.objects.get(pk__gte=2)    # Error
+Visitor.objects.get(pk=200)  # Error
+
+# Искать по сортировке в столбце 'about'
+Visitor.objects.filter(pk__lte=4).order_by('about')
+
+# Сортировка
+Visitor.objects.order_by('nik_name')
+
+# Обратная Сортировка
+Visitor.objects.order_by('-time_create')
+
+# --------- Менять записи базы -----------
+
+v4 = Visitor.objects.get(pk=4)
+v4.nik_name = 'Jim carrey'
+v4.save()
+
+# -------- Delete --------
+v = Visitor.objects.filter(pk__lte=2)
+v
+v.delete()
+
+
 #  in console & DEBUG = True:
 python manage.py collectstatic
 

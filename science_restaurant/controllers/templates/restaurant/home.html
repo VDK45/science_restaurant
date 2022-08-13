@@ -7,7 +7,7 @@
 	{% for p in posts %}
 			<li><h2>{{p.nik_name}}</h2>
 			<!-- Words Filters -->
-            <p>{{p.about|linebreaks|truncatewords:50}}</p>
+            <p>{{p.about|linebreaks|truncatewords:100}}</p>
 	{% autoescape on %}
 	{{p.content|linebreaks|truncatewords:50}}
 	{% endautoescape %}
