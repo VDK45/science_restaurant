@@ -13,7 +13,10 @@
 	{{p.content|linebreaks|truncatewords:50}}
 	{% endautoescape %}
 			<div class="clear"></div>
-			<p class="link-read-post"><a href="{% url 'news' p.pk %}">Читать пост</a></p>
+			<!--	Tag url		-->
+<!--			<p class="link-read-post"><a href="{% url 'news' p.pk %}">Читать пост</a></p>  -->
+			<!--	Переменный записи в базе данных 	-->
+			<p class="link-read-post"><a href="{{ p.get_absolute_url }}">Читать пост</a></p>
 			</li>
 	{% endfor %}
 </ul>

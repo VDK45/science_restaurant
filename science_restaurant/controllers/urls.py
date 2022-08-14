@@ -22,5 +22,8 @@ urlpatterns = [
     path('contact/', contact, name='contact'),
     path('login/', login, name='login'),
     path('news/<int:news_id>/', show_news, name='news'),
+    path('food_menu/', food_menu, name='food_menu'),
+    path('games/', games, name='games'),
+    path('others/', others, name='others'),
 
 ]

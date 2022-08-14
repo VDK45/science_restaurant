@@ -35,19 +35,19 @@
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
-		<li class="selected">Все категории</li>
-		<li><a href="#">Развлечение</a></li>
-		<li><a href="#">Меню</a></li>
-		<li><a href="#">Допольнительные</a></li>
+		<li class="selected">Categories:</li>
+		<li><a href="{% url 'food_menu' %}">Food menu</a></li>
+		<li><a href="{% url 'games' %}">Games</a></li>
+		<li><a href="{% url 'others' %}">Others</a></li>
 		<li class="share">
-		<p>Наш канал</p>
+		<p>Chanel on Youtube:</p>
 		<a class="share-yt" href="https://www.youtube.com/watch?v=bYCKVp-HJg4&list=PLs8c_Ytyvy5POrPUiXDn80jvIVmnFbzbh&ab_channel=VDK45" target="_blank" rel="nofollow"></a>
 		</li>
 	</ul>
 </td>
 <!-- Конец Sidebar'а -->
 <td valign="top" class="content">
-	<!-- Хлебные крошки -->
+	<!-- -->
 	{% block breadcrumbs %}
 	{% endblock %}
 

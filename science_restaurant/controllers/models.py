@@ -1,6 +1,7 @@
 from django.db import models
 
 # Create your models here.
+from django.urls import reverse
 
 
 class Visitor(models.Model):
@@ -13,3 +14,7 @@ class Visitor(models.Model):
 
     def __str__(self):
         return f'Name {self.nik_name} - {self.about}'
+
+    def get_absolute_url(self):
+        return reverse('news', kwargs={'news_id': self.pk})
+

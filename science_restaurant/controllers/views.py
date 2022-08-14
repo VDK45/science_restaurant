@@ -88,9 +88,15 @@ def show_news(request, news_id):
     return HttpResponseNotFound(f'<h1> Страница NEWS id = {news_id} </h1>')
 
 
+def food_menu(request):
+    return HttpResponseNotFound('<h1> Страница FOOD MENU </h1>')
 
 
+def games(request):
+    return HttpResponseNotFound('<h1> Страница Games </h1>')
 
 
+def others(request):
+    return HttpResponseNotFound('<h1> Страница Others </h1>')
 
 
