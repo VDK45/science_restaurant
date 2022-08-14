@@ -43,20 +43,54 @@ def page_not_found(request, exception):
 
 def redirect_301(request, month):
     if int(month) > 9:
-        return redirect('re_main', permanent=False)  # Всегда
-        # return redirect('/')  # Времено
+        # return redirect('main', permanent=False)  # Всегда
+        return redirect('main')  # Времено
     return HttpResponse(f"<h1>Архив по месяцам </h1> <h2>{month}</h2>")
 
 
 # base.html
-menu = ['About restaurant', 'Add news', 'Feedback', 'Longin']
+# menu = ['About restaurant', 'Add news', 'Feedback', 'Longin']
+menu = [{'title': 'About US', 'url_name': 'about_us'},
+        {'title': 'Add news', 'url_name': 'add_news'},
+        {'title': 'Feed back', 'url_name': 'contact'},
+        {'title': 'Login', 'url_name': 'login'}
+        ]
 
 
 def home(request):  # HttpRequest
     posts = Visitor.objects.all()  # Connect to BD
-    return render(request, 'restaurant/home.html', {'posts': posts, 'menu': menu, 'title': 'Home page'})
+    home_context = {
+        'posts': posts,
+        'menu': menu,
+        'title': 'Home page'
+    }
+    return render(request, 'restaurant/home.html', context=home_context)
 
 
 def about_us(request):
-    return render(request, 'restaurant/about.html', {'menu': menu, 'title': 'About US'})
+    au_context = {'menu': menu, 'title': 'About US'}
+    return render(request, 'restaurant/about.html', context=au_context)
+
+
+def add_news(request):
+    return HttpResponseNotFound('<h1> Страница  ADD NEW </h1>')
+
+
+def contact(request):
+    return HttpResponseNotFound('<h1> Страница CONTACT </h1>')
+
+
+def login(request):
+    return HttpResponseNotFound('<h1> Страница LOGIN </h1>')
+
+
+def show_news(request, news_id):
+    return HttpResponseNotFound(f'<h1> Страница NEWS id = {news_id} </h1>')
+
+
+
+
+
+
+
 

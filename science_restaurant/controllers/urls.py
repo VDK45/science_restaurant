@@ -2,8 +2,8 @@ from django.urls import path, re_path
 from .views import *
 
 urlpatterns = [
-    path('', home, name='re_main'),
-    path('home/', home, name='re_main'),
+    path('', home),
+    path('home/', home, name='main'),
     path('index/<int:index_id>/', index),  # http://127.0.0.1:8000/science_restaurant/index/45
     path('categories/<str:cat_str>/', categories),  # http://127.0.0.1:8000/science_restaurant/categories/a  NOT /
     # path('slug/<slug:cat_slug>/', categories),  # ASCII =  Latin + int
@@ -17,6 +17,10 @@ urlpatterns = [
     # http://127.0.0.1:8000/science_restaurant/test_get/a/?name=Garik&type=actor
     re_path(r'^archive_m/(?P<month>[0-9])/', redirect_301),
     # http://127.0.0.1:8000/science_restaurant/archive/month/9
-    path('about_us', about_us, name='about_us'),
+    path('about_us/', about_us, name='about_us'),
+    path('add_news/', add_news, name='add_news'),
+    path('contact/', contact, name='contact'),
+    path('login/', login, name='login'),
+    path('news/<int:news_id>/', show_news, name='news'),
 
 ]
