@@ -52,7 +52,7 @@ def redirect_301(request, month):
 # menu = ['About restaurant', 'Add news', 'Feedback', 'Longin']
 menu = [{'title': 'About US', 'url_name': 'about_us'},
         {'title': 'Add news', 'url_name': 'add_news'},
-        {'title': 'Feed back', 'url_name': 'contact'},
+        {'title': 'Address', 'url_name': 'contact'},
         {'title': 'Login', 'url_name': 'login'}
         ]
 
@@ -73,7 +73,9 @@ def about_us(request):
 
 
 def add_news(request):
-    return HttpResponseNotFound('<h1> Страница  ADD NEW </h1>')
+    an_context = {'menu': menu, 'title': 'Add news'}
+    # return HttpResponseNotFound('<h1> Страница  ADD NEW </h1>')
+    return render(request, 'restaurant/add_news.html', context=an_context)
 
 
 def contact(request):
