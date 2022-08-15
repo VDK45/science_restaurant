@@ -79,7 +79,9 @@ def add_news(request):
 
 
 def contact(request):
-    return HttpResponseNotFound('<h1> Страница CONTACT </h1>')
+    # return HttpResponseNotFound('<h1> Страница CONTACT </h1>')
+    c_context = {'menu': menu, 'title': 'Contacts'}
+    return render(request, 'restaurant/contact.html', context=c_context)
 
 
 def login(request):
@@ -90,12 +92,12 @@ def show_news(request, news_id):
     return HttpResponseNotFound(f'<h1> Страница NEWS id = {news_id} </h1>')
 
 
-def food_menu(request):
-    return HttpResponseNotFound('<h1> Страница FOOD MENU </h1>')
+def actors(request):
+    return HttpResponseNotFound('<h1> Страница Актёров </h1>')
 
 
-def games(request):
-    return HttpResponseNotFound('<h1> Страница Games </h1>')
+def billionaires(request):
+    return HttpResponseNotFound('<h1> Страница Миллионеры </h1>')
 
 
 def others(request):

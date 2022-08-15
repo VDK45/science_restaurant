@@ -241,5 +241,44 @@ python manage.py collectstatic
 * STATIC_ROOT - Путь к общей статичесой папке используемой реальным веб-сервером
 * STATICFILES_DIRS - Список доп(нестандартных) путей к статическим файлам, используемых для режима DEBUG
 
+# --------- Создание связей между моделями через класс ForeignKey -------
+
+Foreignkey - Many to one (Поля отношении)
+ManyToManyField - Many to many
+OneToOneField - one to one
+
+Foreignkey = (< >, on_delete=< >)
+
+models.CASCADE
+models.PROTECT
+models.SET_NULL
+models.SET_DEFAULT
+models.SET()
+models.DO_NOTHING
+
+# -- Создать новую миграцию (в терминале)
+
+python manage.py makemigrations
+python manage.py migrate
+
+# Data base
+python manage.py shell
+
+# import all models
+from controllers.models import *
+
+# Create news names for Category
+Category.objects.create(name='Actors')
+Category.objects.create(name='Billionaire')
+
+# Change Visitor cat = 1
+v_lst = Visitor.objects.all()
+v_lst.update(cat_id=1)
+
+
+
+
+
+
 
 
