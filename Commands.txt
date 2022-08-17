@@ -275,6 +275,30 @@ Category.objects.create(name='Billionaire')
 v_lst = Visitor.objects.all()
 v_lst.update(cat_id=1)
 
+# ------ ADMIN PANEL ---------
+# IN terminal
+
+python manage.py createsuperuser
+
+# Open admin.py
+from .models import *
+admin.site.register(<name_model>)
+
+# add inner class
+    class Meta:
+        verbose_name = 'Знаменитости'
+        verbose_name_plural = 'Знаменитости'
+        ordering = ['time_create', 'Поле'] # Сортировка по полю
+# verbose_name='NAME'
+
+# ------ Migrate ---------
+# In terminal
+python manage.py makemigrations
+python manage.py migrate
+
+
+
+
 
 
 
