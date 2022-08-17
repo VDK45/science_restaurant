@@ -58,11 +58,14 @@ menu = [{'title': 'About US', 'url_name': 'about_us'},
 
 
 def home(request):  # HttpRequest
-    posts = Visitor.objects.all()  # Connect to BD
+    posts = Visitor.objects.all()  # Connect to table Visitor in BD
+    cats = Category.objects.all()  # Connect to table Category in BD
     home_context = {
         'posts': posts,
+        'cats': cats,
         'menu': menu,
-        'title': 'Home page'
+        'title': 'Home page',
+        'cat_selected': 0,
     }
     return render(request, 'restaurant/home.html', context=home_context)
 
@@ -70,12 +73,13 @@ def home(request):  # HttpRequest
 def about_us(request):
     au_context = {'menu': menu, 'title': 'About US'}
     return render(request, 'restaurant/about.html', context=au_context)
+    # return HttpResponseNotFound('<h1> Страница About US </h1>')
 
 
 def add_news(request):
     an_context = {'menu': menu, 'title': 'Add news'}
-    # return HttpResponseNotFound('<h1> Страница  ADD NEW </h1>')
     return render(request, 'restaurant/add_news.html', context=an_context)
+    # return HttpResponseNotFound('<h1> Страница  ADD NEW </h1>')
 
 
 def contact(request):
@@ -85,7 +89,9 @@ def contact(request):
 
 
 def login(request):
-    return HttpResponseNotFound('<h1> Страница LOGIN </h1>')
+    # return HttpResponseNotFound('<h1> Страница LOGIN </h1>')
+    l_context = {'menu': menu, 'title': 'Login'}
+    return render(request, 'restaurant/login.html', context=l_context)
 
 
 def show_news(request, news_id):
@@ -102,5 +108,26 @@ def billionaires(request):
 
 def others(request):
     return HttpResponseNotFound('<h1> Страница Others </h1>')
+
+
+def show_category(request, cat_id):
+    # return HttpResponseNotFound(f'<h1> Страница Category {cat_id} </h1>')
+
+    posts = Visitor.objects.filter(cat_id=cat_id)
+    cats = Category.objects.all()
+
+    if len(posts) == 0:
+        raise Http404()
+
+    context = {
+        'posts': posts,
+        'cats': cats,
+        'menu': menu,
+        'title': 'Отображение по рубрикам',
+        'cat_selected': cat_id,
+    }
+
+    return render(request, 'restaurant/home.html', context=context)
+
 
 

@@ -2,7 +2,7 @@ from django.urls import path, re_path
 from .views import *
 
 urlpatterns = [
-    path('', home),
+    path('', home, name='home'),
     path('home/', home, name='main'),
     path('index/<int:index_id>/', index),  # http://127.0.0.1:8000/science_restaurant/index/45
     path('categories/<str:cat_str>/', categories),  # http://127.0.0.1:8000/science_restaurant/categories/a  NOT /
@@ -25,5 +25,6 @@ urlpatterns = [
     path('actors/', actors, name='actors'),
     path('billionaires/', billionaires, name='billionaires'),
     path('others/', others, name='others'),
+    path('category/<int:cat_id>/', show_category, name='category'),
 
 ]
