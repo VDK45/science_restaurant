@@ -296,6 +296,11 @@ admin.site.register(<name_model>)
 python manage.py makemigrations
 python manage.py migrate
 
+# ------ Create package controllers/<templatetags> -------
+
+
+
+
 
 
 
