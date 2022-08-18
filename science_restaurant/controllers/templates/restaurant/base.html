@@ -1,4 +1,6 @@
 {% load static %}
+{% load controllers_tags %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,6 +36,10 @@
 <tr>
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
+
+<!--		{% get_cats as categories %}-->
+<!--		{% get_cats filter=1 %}-->
+<!--		{% get_cats 1 %}-->
 	<ul id="leftchapters">
 <!--		<li class="selected">Categories:</li>-->
 <!--		<li><a href="{% url 'actors' %}">Actors</a></li>-->
@@ -45,13 +51,8 @@
 			<li><a href="{% url 'home' %}">Все категории</a></li>
 		{% endif %}
 
-		{% for c in cats %}
-			{% if c.pk == cat_selected %}
-				<li class="selected">{{c.name}}</li>
-			{% else %}
-				<li><a href="{{ c.get_absolute_url }}">{{c.name}}</a></li>
-			{% endif %}
-		{% endfor %}
+		{% show_categories 'name' cat_selected %}
+
 
 		<li class="share">
 		<p>Chanel on Youtube:</p>

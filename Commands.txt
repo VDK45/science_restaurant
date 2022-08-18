@@ -297,6 +297,29 @@ python manage.py makemigrations
 python manage.py migrate
 
 # ------ Create package controllers/<templatetags> -------
+# ---- Create templatetags/controllers_tags.py
+from django import template
+from controllers.models import *
+
+
+register = template.Library()
+
+
+@register.simple_tag()
+def get_categories():
+    return Category.objects.all()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
