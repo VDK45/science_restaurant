@@ -1,9 +1,12 @@
 
 
 {% extends 'restaurant/base.html' %}
+<!--{% load controllers_tags %}-->
+
 
 {% block content %}
 <ul class="list-articles">
+
 	{% for p in posts %}
 			<li><div class="article-panel">
 	<p class="first">Категория: {{p.cat}}</p>

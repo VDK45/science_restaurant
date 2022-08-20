@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 
 
@@ -59,15 +59,35 @@ menu = [{'title': 'About US', 'url_name': 'about_us'},
 
 def home(request):  # HttpRequest
     posts = Visitor.objects.all()  # Connect to table Visitor in BD
-    cats = Category.objects.all()  # Connect to table Category in BD
+    # cats = Category.objects.all()  # Connect to table Category in BD
     home_context = {
         'posts': posts,
-        'cats': cats,
+        # 'cats': cats,
         'menu': menu,
         'title': 'Home page',
         'cat_selected': 0,
     }
     return render(request, 'restaurant/home.html', context=home_context)
+
+
+def show_category(request, cat_id):
+    # return HttpResponseNotFound(f'<h1> Страница Category {cat_id} </h1>')
+
+    posts = Visitor.objects.filter(cat_id=cat_id)
+    # cats = Category.objects.all()
+
+    if len(posts) == 0:
+        raise Http404()
+
+    context = {
+        'posts': posts,
+        # 'cats': cats,
+        'menu': menu,
+        'title': 'Отображение по рубрикам',
+        'cat_selected': cat_id,
+    }
+
+    return render(request, 'restaurant/home.html', context=context)
 
 
 def about_us(request):
@@ -94,8 +114,18 @@ def login(request):
     return render(request, 'restaurant/login.html', context=l_context)
 
 
-def show_news(request, news_id):
-    return HttpResponseNotFound(f'<h1> Страница NEWS id = {news_id} </h1>')
+def show_news(request, post_slug):
+    # return HttpResponseNotFound(f'<h1> Страница NEWS id = {news_id} </h1>')
+    post = get_object_or_404(Visitor, slug=post_slug)
+
+    context = {
+        'post': post,
+        'menu': menu,
+        'title': post.about,
+        'cat_selected': post.cat_id,
+    }
+
+    return render(request, 'restaurant/post.html', context=context)
 
 
 def actors(request):
@@ -110,24 +140,7 @@ def others(request):
     return HttpResponseNotFound('<h1> Страница Others </h1>')
 
 
-def show_category(request, cat_id):
-    # return HttpResponseNotFound(f'<h1> Страница Category {cat_id} </h1>')
 
-    posts = Visitor.objects.filter(cat_id=cat_id)
-    cats = Category.objects.all()
-
-    if len(posts) == 0:
-        raise Http404()
-
-    context = {
-        'posts': posts,
-        'cats': cats,
-        'menu': menu,
-        'title': 'Отображение по рубрикам',
-        'cat_selected': cat_id,
-    }
-
-    return render(request, 'restaurant/home.html', context=context)
 
 
 

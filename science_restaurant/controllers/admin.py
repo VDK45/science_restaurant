@@ -10,12 +10,14 @@ class VisitorAdmin(admin.ModelAdmin):
     search_fields = ('title', 'about')          # Search fields
     list_editable = ('is_published',)           # filter edit
     list_filter = ('is_published', 'time_create')   # Filter table
+    prepopulated_fields = {'slug': ('nik_name', )}
 
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     list_display_links = ('id', 'name')
     search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name', )}
 
 
 admin.site.register(Category, CategoryAdmin)
