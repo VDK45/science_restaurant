@@ -25,6 +25,7 @@ urlpatterns = [
     path('actors/', actors, name='actors'),
     path('billionaires/', billionaires, name='billionaires'),
     path('others/', others, name='others'),
+    # path('category/<int:cat_id>/', show_category, name='category'),
     path('category/<int:cat_id>/', show_category, name='category'),
 
 ]

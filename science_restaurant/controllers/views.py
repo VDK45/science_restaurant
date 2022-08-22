@@ -1,5 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
+
+from .forms import *
 from .models import *
 
 
@@ -83,35 +85,11 @@ def show_category(request, cat_id):
         'posts': posts,
         # 'cats': cats,
         'menu': menu,
-        'title': 'Отображение по рубрикам',
+        'title': f'Category {cat_id}',
         'cat_selected': cat_id,
     }
 
     return render(request, 'restaurant/home.html', context=context)
-
-
-def about_us(request):
-    au_context = {'menu': menu, 'title': 'About US'}
-    return render(request, 'restaurant/about.html', context=au_context)
-    # return HttpResponseNotFound('<h1> Страница About US </h1>')
-
-
-def add_news(request):
-    an_context = {'menu': menu, 'title': 'Add news'}
-    return render(request, 'restaurant/add_news.html', context=an_context)
-    # return HttpResponseNotFound('<h1> Страница  ADD NEW </h1>')
-
-
-def contact(request):
-    # return HttpResponseNotFound('<h1> Страница CONTACT </h1>')
-    c_context = {'menu': menu, 'title': 'Contacts'}
-    return render(request, 'restaurant/contact.html', context=c_context)
-
-
-def login(request):
-    # return HttpResponseNotFound('<h1> Страница LOGIN </h1>')
-    l_context = {'menu': menu, 'title': 'Login'}
-    return render(request, 'restaurant/login.html', context=l_context)
 
 
 def show_news(request, post_slug):
@@ -126,6 +104,42 @@ def show_news(request, post_slug):
     }
 
     return render(request, 'restaurant/post.html', context=context)
+
+
+def about_us(request):
+    au_context = {'menu': menu, 'title': 'About US'}
+    return render(request, 'restaurant/about.html', context=au_context)
+    # return HttpResponseNotFound('<h1> Страница About US </h1>')
+
+
+def add_news(request):
+    # an_context = {'menu': menu, 'title': 'Add news'}
+    # return render(request, 'restaurant/add_news.html', context=an_context)
+    # return HttpResponseNotFound('<h1> Страница  ADD NEW </h1>')
+    if request.method == 'POST':
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            try:
+                Visitor.objects.create(**form.cleaned_data)
+                return redirect('home')
+            except:
+                form.add_error(None, 'Ошибка добавления поста')
+
+    else:
+        form = AddPostForm()
+    return render(request, 'restaurant/add_news.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
+
+def contact(request):
+    # return HttpResponseNotFound('<h1> Страница CONTACT </h1>')
+    c_context = {'menu': menu, 'title': 'Contacts'}
+    return render(request, 'restaurant/contact.html', context=c_context)
+
+
+def login(request):
+    # return HttpResponseNotFound('<h1> Страница LOGIN </h1>')
+    l_context = {'menu': menu, 'title': 'Login'}
+    return render(request, 'restaurant/login.html', context=l_context)
 
 
 def actors(request):
