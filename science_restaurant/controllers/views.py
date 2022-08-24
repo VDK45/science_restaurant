@@ -117,18 +117,22 @@ def add_news(request):
     # return render(request, 'restaurant/add_news.html', context=an_context)
     # return HttpResponseNotFound('<h1> Страница  ADD NEW </h1>')
     if request.method == 'POST':
-        form = AddPostForm(request.POST)
+        form = AddPostForm(request.POST, request.FILES)
         if form.is_valid():
-            print(form.cleaned_data)
-            try:
-                Visitor.objects.create(**form.cleaned_data)
-                return redirect('home')
-            except:
-                form.add_error(None, 'Ошибка добавления поста')
+            form.save()
+            return redirect('home')
+            # print(form.cleaned_data)
+            # try:
+                # Visitor.objects.create(**form.cleaned_data)
+            #     form.save()
+            #     return redirect('home')
+            # except:
+            #     form.add_error(None, 'Ошибка добавления поста')
 
     else:
         form = AddPostForm()
     return render(request, 'restaurant/add_news.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
+
 
 def contact(request):
     # return HttpResponseNotFound('<h1> Страница CONTACT </h1>')
