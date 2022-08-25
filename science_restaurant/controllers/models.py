@@ -18,7 +18,7 @@ class Visitor(models.Model):
         return f'Name {self.nik_name} - {self.about}'
 
     def get_absolute_url(self):
-        return reverse('news', kwargs={'post_slug': self.slug})
+        return reverse('news', kwargs={'news_slug': self.slug})
 
     class Meta:
         verbose_name = 'Visitor'
@@ -34,7 +34,8 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('category', kwargs={'cat_id': self.pk})
+        # return reverse('category', kwargs={'cat_id': self.pk})  # For function views.show_category
+        return reverse('category', kwargs={'cat_slug': self.slug})  # For class RestaurantCategory
 
     class Meta:
         verbose_name = 'Category'
