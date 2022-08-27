@@ -15,7 +15,8 @@ class Visitor(models.Model):
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, null=True, verbose_name='Category')
 
     def __str__(self):
-        return f'Name {self.nik_name} - {self.about}'
+        # return f'Name {self.nik_name} - {self.about}'
+        return f'Name {self.nik_name}'
 
     def get_absolute_url(self):
         return reverse('news', kwargs={'news_slug': self.slug})
@@ -23,7 +24,7 @@ class Visitor(models.Model):
     class Meta:
         verbose_name = 'Visitor'
         verbose_name_plural = 'Visitors'
-        ordering = ['time_create', 'nik_name']
+        ordering = ['-time_create', 'nik_name']  # Sorting by 'nik_name'
 
 
 class Category(models.Model):

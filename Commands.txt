@@ -309,6 +309,39 @@ register = template.Library()
 def get_categories():
     return Category.objects.all()
 
+# -------  ORM ---------
+Model.objects.all()   # Все записи //  Возврашает список
+Model.objects.all().reverse()   # Все записи в обратном
+Model.objects.all()[2:5]   # от 2 до 4
+Model.objects.order_by('pk')  # Сортирока по primary keys (pk)
+Model.objects.filter(pk__lte=2)  #  Сортирока по pk (pk <= 2)
+Model.objects.filter(pk__gte=2)  #  Сортирока по pk (pk >= 2)
+Model.objects.get(pk=2)  #  Выбрать (pk=2) Возврашает экземпляр а не список
+M2 = Model.objects.get(pk=2)
+M2.name / M2.title / M2.is_published  # - значения полей записей таблицы
+M2.pk / M2.id  # - id
+M2.cat # - Foreign key
+>>> C1 = Category.objects.get(pk=1)  # Категория = 1
+>>> C1.visitor_set.all()    #  Все записи в категории 1
+Model.objects.filter(name__contains='фрагмент')  #  найти фрагмент в любом месте
+Model.objects.filter(name__icontains='фрагмент')  #  найти фрагмент в любом месте без учета регистра букв
+Model.objects.filter(pk__in=[2, 5, 6])  #  найти по значениям
+Model.objects.filter(pk__in=[2, 5, 6], is_published=True)  #  найти по 2 условиям
+Model.objects.filter(fkeys__in=[2, 5])  #  найти по foreign_keys 2|5
+# ----- class q -----
+from django.db.models import Q
+# ~ Логическое НЕ Priority 1
+# & Логическое И Priority 2
+# | Логическое ИЛИ Priority 3
+Model.objects.filter(Q(pk__lt=5) | Q(cat_id=2))  #  найти записи pk<5 ИЛИ cat_i = 2
+Model.objects.filter(Q(pk__lt=5) & Q(cat_id=2))  #  найти записи pk<5 И cat_i = 2
+Model.objects.filter(~Q(pk__lt=5) | Q(cat_id=2))  #  найти записи pk>5 ИЛИ cat_i = 2
+
+
+
+
+
+
 
 
 
