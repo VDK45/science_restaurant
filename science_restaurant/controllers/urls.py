@@ -3,7 +3,8 @@ from .views import *
 
 urlpatterns = [
     path('', VisitorHome.as_view(), name='main'),
-    path('home/', home, name='home'),
+    # path('home/', home, name='home'),
+    path('', VisitorHome.as_view(), name='home'),
     path('index/<int:index_id>/', index),  # http://127.0.0.1:8000/science_restaurant/index/45
     path('categories/<str:cat_str>/', categories),  # http://127.0.0.1:8000/science_restaurant/categories/a  NOT /
     # path('slug/<slug:cat_slug>/', categories),  # ASCII =  Latin + int

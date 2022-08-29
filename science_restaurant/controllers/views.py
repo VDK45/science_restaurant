@@ -2,8 +2,11 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
 from .models import *
+from .utils import *
+
 
 
 # Create your views here.
@@ -53,14 +56,14 @@ def redirect_301(request, month):
 
 # base.html
 # menu = ['About restaurant', 'Add news', 'Feedback', 'Longin']
-menu = [{'title': 'About US', 'url_name': 'about_us'},
-        {'title': 'Add news', 'url_name': 'add_news'},
-        {'title': 'Address', 'url_name': 'contact'},
-        {'title': 'Login', 'url_name': 'login'}
-        ]
+# menu = [{'title': 'About US', 'url_name': 'about_us'},
+#         {'title': 'Add news', 'url_name': 'add_news'},
+#         {'title': 'Address', 'url_name': 'contact'},
+#         {'title': 'Login', 'url_name': 'login'}
+#         ]
 
 
-class VisitorHome(ListView):
+class VisitorHome(DataMixin, ListView):
     model = Visitor
     template_name = 'restaurant/home_class.html'
     context_object_name = 'posts'  # Использовать старый контекст
@@ -68,16 +71,18 @@ class VisitorHome(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):  # dynamic title context
         context = super().get_context_data(**kwargs)
-        context['menu'] = menu
-        context['title'] = 'Home page'
-        context['cat_selected'] = 0
+        # context['menu'] = menu
+        # context['title'] = 'Home page'
+        # context['cat_selected'] = 0
+        c_def = self.get_user_context(title="Главная страница")
+        context = dict(list(context.items()) + list(c_def.items()))
         return context
 
     def get_queryset(self):
         return Visitor.objects.filter(is_published=True)
 
 
-class RestaurantCategory(ListView):
+class RestaurantCategory(DataMixin, ListView):
     model = Visitor
     template_name = 'restaurant/home_class.html'
     context_object_name = 'posts'  # Использовать старый контекст
@@ -85,9 +90,12 @@ class RestaurantCategory(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):  # dynamic title context
         context = super().get_context_data(**kwargs)
-        context['menu'] = menu
-        context['title'] = 'Category -' + str(context['posts'][0].cat)
-        context['cat_selected'] = context['posts'][0].cat_id
+        # context['menu'] = menu
+        # context['title'] = 'Category -' + str(context['posts'][0].cat)
+        # context['cat_selected'] = context['posts'][0].cat_id
+        c_def = self.get_user_context(title='Category -' + str(context['posts'][0].cat),
+                                      cat_selected=context['posts'][0].cat_id)
+        context = dict(list(context.items()) + list(c_def.items()))
         return context
 
     def get_queryset(self):
@@ -111,7 +119,7 @@ def show_category(request, cat_id):
         'cat_selected': cat_id,
     }
 
-    return render(request, 'restaurant/home.html', context=context)
+    return render(request, 'restaurant/home_class.html', context=context)
 
 
 def home(request):  # HttpRequest
@@ -139,7 +147,7 @@ def home(request):  # HttpRequest
 #     }
 #
 #     return render(request, 'restaurant/post.html', context=context)
-class ShowNews(DetailView):
+class ShowNews(DataMixin, DetailView):
     model = Visitor
     template_name = 'restaurant/post.html'
     # slug_url_kwarg = 'post_slug'
@@ -148,8 +156,10 @@ class ShowNews(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):  # dynamic title context
         context = super().get_context_data(**kwargs)
-        context['title'] = context['post']
-        context['menu'] = menu
+        # context['title'] = context['post']
+        # context['menu'] = menu
+        c_def = self.get_user_context(title="Главная страница")
+        context = dict(list(context.items()) + list(c_def.items()))
         return context
 
 
@@ -159,15 +169,19 @@ def about_us(request):
     # return HttpResponseNotFound('<h1> Страница About US </h1>')
 
 
-class AddNews(CreateView):
+class AddNews(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'restaurant/add_news.html'
     success_url = reverse_lazy('home')
+    # login_url = '/admin/'   # Переход на страницу логина
+    login_url = reverse_lazy('login')  # Переход на страницу логина
 
     def get_context_data(self, *, object_list=None, **kwargs):  # dynamic title context
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Add news'
-        context['menu'] = menu
+        # context['title'] = 'Add news'
+        # context['menu'] = menu
+        c_def = self.get_user_context(title="Добавить новость")
+        context = dict(list(context.items()) + list(c_def.items()))
         return context
 
 # def add_news(request):

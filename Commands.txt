@@ -310,10 +310,19 @@ def get_categories():
     return Category.objects.all()
 
 # -------  ORM ---------
+# ---- python manage.py shell -----
+# ---- from Проект.models import * -----
+# ----- from django.db import connection -----
+connection.queries
+
+Model.objects.first()  # Первая запись //  Возврашает экземпляр
+Model.objects.last()  # Последняя запись //  Возврашает экземпляр
 Model.objects.all()   # Все записи //  Возврашает список
 Model.objects.all().reverse()   # Все записи в обратном
 Model.objects.all()[2:5]   # от 2 до 4
 Model.objects.order_by('pk')  # Сортирока по primary keys (pk)
+Model.objects.order_by('pk').first()  # Первая запись по Сортироке по primary keys (pk)
+Model.objects.order_by('-pk').first()  # Первая запись по обратной Сортироке по primary keys (pk)
 Model.objects.filter(pk__lte=2)  #  Сортирока по pk (pk <= 2)
 Model.objects.filter(pk__gte=2)  #  Сортирока по pk (pk >= 2)
 Model.objects.get(pk=2)  #  Выбрать (pk=2) Возврашает экземпляр а не список
@@ -337,28 +346,89 @@ Model.objects.filter(Q(pk__lt=5) | Q(cat_id=2))  #  найти записи pk<5
 Model.objects.filter(Q(pk__lt=5) & Q(cat_id=2))  #  найти записи pk<5 И cat_i = 2
 Model.objects.filter(~Q(pk__lt=5) | Q(cat_id=2))  #  найти записи pk>5 ИЛИ cat_i = 2
 
+# ----- Commands for 'time_created' 'time_update'-------
+Model.objects.last('time_update')  # Последняя обновлёная запись //  Возврашает экземпляр
+Model.objects.earliest('time_update')  # Первая добаленая запись // Возврашает экземпляр
+Model.objects.order_by('pk').earliest('time_update')  # Первая добаленая запись по pk
 
+# ----- Next Previous -----
+p2 = Model.objects.get(pk=2)
+# -- get_previous by time_update --
+p2.get_previous_by_time_update()  # Предыдушая запись до p2
+p2.get_next_by_time_update()  # Следуюшая запись после p2
+p2.get_next_by_time_update(pk__gt=5)  # Следуюшая запись после p2 pk>5
 
+# ----- exists() count() -----
+# --- Add new Category -----
+Category.objects.create(name='scientists', slug='scientist')
+c3 = Category.objects.get(pk=3)
+c3.visitor_set.exists()  # Есть ли visitor c pk=3 ??
+c3.visitor_set.count()  # Cколько запись с pk=3
+#--- example ---
+Visitor.objects.filter(pk__gt=2).count()  # Количество записей с pk>2
 
+# ----- Одинакоые зпросы ----
+Visitor.objects.filter(cat__slug='actors')  # cat__slug cat в классе Visitor
+Visitor.objects.filter(cat__name='Actors')  # cat__slug cat в классе Visitor
+Visitor.objects.filter(cat__in=[1])  # cat id = 1
 
+# ------
+Visitor.objects.filter(cat__name__contains='act')  # Visitor у которых в Category name есть фрагмент act
+# ------
+Category.objects.filter(visitor__nik_name__contains='jackie')   # Категория у Visitor с фрагментом 'jackie' в nik_name
+Category.objects.filter(visitor__nik_name__contains='a').distinct()  # Уникальные категории у Visitorов с фрагментом 'а' в nik_name
 
+# ---------  Aggregate -------
+from django.db.models import *
+Visitor.objects.aggregate(Min('cat_id'))
+Visitor.objects.aggregate(Max('cat_id'))
+Visitor.objects.aggregate(res=Sum('cat_id') - Count('cat_id'))
+Visitor.objects.aggregate(res=Avg('cat_id'))
+Visitor.objects.filter(pk__gt=4).aggregate(res=Avg('cat_id'))
 
+# ----- Выборка все поля -----
+v1 = Visitor.objects.get(pk=1)
+v1.nik_name
+v1.time_update
+v1.about
 
+# ----- Выборка отдельных полей -----
+v1 = Visitor.objects.values('nik_name', 'cat_id').get(pk=1)
 
+# ----- Связаные данные ------
+Visitor.objects.values('nik_name', 'cat__name').get(pk=1)
+Visitor.objects.values('nik_name', 'cat__slug').get(pk=1)
 
+# example:
+all = Visitor.objects.values('nik_name', 'cat__name')
+for v in all:
+    print(f"{v['nik_name']} -- {v['cat__name']}")
 
+# ----------------- annotate ---------
+# ---- SELECT count(id) FROM visitor GROUP BY cat_id ---
+Visitor.objects.values('cat_id').annotate(Count('id'))
+c = Category.objects.annotate(Count('visitor'))
+c[0].visitor__count
+c[1].visitor__count
+c = Category.objects.annotate(total=Count('visitor')).filter(total__gt=0)
 
+# ------ class F -------
+from django.db import F
+Visitor.objects.filter(pk__gt=F('cat_id'))
+# Change cat_id += cat_id
+Visitor.objects.filter(slug='private').update(cat_id=F('cat_id')+1)
+#
+v = Visitor.objects.get(pk=16)
+v.cat_id = F('cat_id') + 1
+v.save()
+v.cat_id
 
+# -------  SQL request -------
+all = Visitor.objects.raw('SELECT * FROM controllers_visitor')
+for v in all:
+    print(v.id, v.nik_name)
 
-
-
-
-
-
-
-
-
-
+#
 
 
 
