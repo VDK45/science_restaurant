@@ -164,6 +164,19 @@ def about_us(request):
     # return HttpResponseNotFound('<h1> Страница About US </h1>')
 
 
+class AboutUs(DataMixin, CreateView):
+    form_class = AddPostForm
+    template_name = 'restaurant/about.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['title'] = 'Add news'
+        # context['menu'] = menu
+        c_def = self.get_user_context(title="About US")
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
+
+
 def login(request):
     # return HttpResponseNotFound('<h1> Страница LOGIN </h1>')
     l_context = {'menu': menu, 'title': 'Login'}
@@ -224,6 +237,19 @@ def contact(request):
     # return HttpResponseNotFound('<h1> Страница CONTACT </h1>')
     c_context = {'menu': menu, 'title': 'Contacts'}
     return render(request, 'restaurant/contact.html', context=c_context)
+
+
+class Contact(DataMixin, CreateView):
+    form_class = AddPostForm
+    template_name = 'restaurant/contact.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['title'] = 'Add news'
+        # context['menu'] = menu
+        c_def = self.get_user_context(title="Contacts")
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
 
 
 def actors(request):
