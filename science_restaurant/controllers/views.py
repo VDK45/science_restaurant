@@ -8,14 +8,9 @@ from .models import *
 from .utils import *
 
 
-
 # Create your views here.
-
-
 # def home(request):  # HttpRequest
 #     return HttpResponse("<h1>Страница приложения Home page </h1>")
-
-
 def index(request, index_id):  # HttpRequest
     return HttpResponse(f"<h1>Страница приложения Index </h1> <h2>{index_id}</h2>")
 
@@ -169,6 +164,25 @@ def about_us(request):
     # return HttpResponseNotFound('<h1> Страница About US </h1>')
 
 
+def login(request):
+    # return HttpResponseNotFound('<h1> Страница LOGIN </h1>')
+    l_context = {'menu': menu, 'title': 'Login'}
+    return render(request, 'restaurant/login.html', context=l_context)
+
+
+class LogIn(DataMixin, CreateView):
+    form_class = AddPostForm
+    template_name = 'restaurant/login.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['title'] = 'Add news'
+        # context['menu'] = menu
+        c_def = self.get_user_context(title="Login")
+        context = dict(list(context.items()) + list(c_def.items()))
+        return context
+
+
 class AddNews(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'restaurant/add_news.html'
@@ -210,12 +224,6 @@ def contact(request):
     # return HttpResponseNotFound('<h1> Страница CONTACT </h1>')
     c_context = {'menu': menu, 'title': 'Contacts'}
     return render(request, 'restaurant/contact.html', context=c_context)
-
-
-def login(request):
-    # return HttpResponseNotFound('<h1> Страница LOGIN </h1>')
-    l_context = {'menu': menu, 'title': 'Login'}
-    return render(request, 'restaurant/login.html', context=l_context)
 
 
 def actors(request):
