@@ -18,6 +18,7 @@ urlpatterns = [
     # http://127.0.0.1:8000/science_restaurant/test_get/a/?name=Garik&type=actor
     re_path(r'^archive_m/(?P<month>[0-9])/', redirect_301),
     # http://127.0.0.1:8000/science_restaurant/archive/month/9
+    # path('about_us/', about_def, name='about_us'),
     path('about_us/', AboutUs.as_view(), name='about_us'),
     # path('add_news/', add_news, name='add_news'),
     path('add_news/', AddNews.as_view(), name='add_news'),

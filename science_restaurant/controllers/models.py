@@ -41,4 +41,4 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Category'
-        # ordering = ['id']  # ORM difference
+        ordering = ['id']  # ORM difference | Important for pagination

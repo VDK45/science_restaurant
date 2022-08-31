@@ -35,6 +35,7 @@
 <table class="table-content" border=0 cellpadding="0" cellspacing="0">
 <tr>
 <!-- Sidebar слева -->
+
 	<td valign="top" class="left-chapters">
 
 <!--		{% get_cats as categories %}-->
@@ -80,6 +81,37 @@
 	<div class="content-text">
 {% block content %}
 {% endblock %}
+		{% if page_obj.has_other_pages %}
+<nav class="list-pages">
+    <ul>
+		<!--	Стрелка назад	-->
+		{% if page_obj.has_previous %}
+		<li class="page-num">
+			<a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+		</li>
+		{% endif %}
+
+        {% for p in paginator.page_range %}
+		<!--    Показывать номер страницы как текст	-->
+		{% if page_obj.number == p %}
+        <li class="page-num page-num-selected">{{ p }}</li>
+        <!--	Показывать количества номеров с двух сторон	-->
+		{% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2  %}
+        <li class="page-num">
+            <a href="?page={{ p }}">{{ p }}</a>
+        </li>
+		{% endif %}
+        {% endfor %}
+		<!--	Стрелка вперед	-->
+		{% if page_obj.has_next %}
+		<li class="page-num">
+			<a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+		</li>
+		{% endif %}
+
+    </ul>
+</nav>
+{% endif %}
 	</div>
 <!-- Конец блока контента -->
 

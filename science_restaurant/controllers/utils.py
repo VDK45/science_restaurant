@@ -10,6 +10,8 @@ menu = [{'title': 'About US', 'url_name': 'about_us'},
 
 
 class DataMixin:
+    # paginate_by = 2  # Elements in page
+
     def get_user_context(self, **kwargs):
         context = kwargs
         # cats = Category.objects.all()

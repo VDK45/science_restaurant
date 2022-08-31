@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -59,6 +60,7 @@ def redirect_301(request, month):
 
 
 class VisitorHome(DataMixin, ListView):
+    paginate_by = 2  # Elements in page
     model = Visitor
     template_name = 'restaurant/home_class.html'
     context_object_name = 'posts'  # Использовать старый контекст
@@ -78,6 +80,7 @@ class VisitorHome(DataMixin, ListView):
 
 
 class RestaurantCategory(DataMixin, ListView):
+    paginate_by = 2  # Elements in page
     model = Visitor
     template_name = 'restaurant/home_class.html'
     context_object_name = 'posts'  # Использовать старый контекст
@@ -97,37 +100,37 @@ class RestaurantCategory(DataMixin, ListView):
         return Visitor.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True)
 
 
-def show_category(request, cat_id):
-    # return HttpResponseNotFound(f'<h1> Страница Category {cat_id} </h1>')
+# def show_category(request, cat_id):
+#     # return HttpResponseNotFound(f'<h1> Страница Category {cat_id} </h1>')
+#
+#     posts = Visitor.objects.filter(cat_id=cat_id)
+#     # cats = Category.objects.all()
+#
+#     if len(posts) == 0:
+#         raise Http404()
+#
+#     context = {
+#         'posts': posts,
+#         # 'cats': cats,
+#         'menu': menu,
+#         'title': f'Category {cat_id}',
+#         'cat_selected': cat_id,
+#     }
+#
+#     return render(request, 'restaurant/home_class.html', context=context)
 
-    posts = Visitor.objects.filter(cat_id=cat_id)
-    # cats = Category.objects.all()
 
-    if len(posts) == 0:
-        raise Http404()
-
-    context = {
-        'posts': posts,
-        # 'cats': cats,
-        'menu': menu,
-        'title': f'Category {cat_id}',
-        'cat_selected': cat_id,
-    }
-
-    return render(request, 'restaurant/home_class.html', context=context)
-
-
-def home(request):  # HttpRequest
-    posts = Visitor.objects.all()  # Connect to table Visitor in BD
-    # cats = Category.objects.all()  # Connect to table Category in BD
-    home_context = {
-        'posts': posts,
-        # 'cats': cats,
-        'menu': menu,
-        'title': 'Home page',
-        'cat_selected': 0,
-    }
-    return render(request, 'restaurant/home.html', context=home_context)
+# def home(request):  # HttpRequest
+#     posts = Visitor.objects.all()  # Connect to table Visitor in BD
+#     # cats = Category.objects.all()  # Connect to table Category in BD
+#     home_context = {
+#         'posts': posts,
+#         # 'cats': cats,
+#         'menu': menu,
+#         'title': 'Home page',
+#         'cat_selected': 0,
+#     }
+#     return render(request, 'restaurant/home.html', context=home_context)
 
 
 # def show_news(request, post_slug):
@@ -158,10 +161,17 @@ class ShowNews(DataMixin, DetailView):
         return context
 
 
-def about_us(request):
-    au_context = {'menu': menu, 'title': 'About US'}
-    return render(request, 'restaurant/about.html', context=au_context)
-    # return HttpResponseNotFound('<h1> Страница About US </h1>')
+# def about_us(request):
+#     au_context = {'menu': menu, 'title': 'About US'}
+#     return render(request, 'restaurant/about.html', context=au_context)
+#     # return HttpResponseNotFound('<h1> Страница About US </h1>')
+def about_def(request):
+    contact_list = Visitor.objects.all()
+    paginator = Paginator(contact_list, 3)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'restaurant/about_def.html', {'page_obj': page_obj, 'menu': menu, 'title': 'О сайте'})
 
 
 class AboutUs(DataMixin, CreateView):
