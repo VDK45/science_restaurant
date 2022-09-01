@@ -1,6 +1,7 @@
 from django.urls import path, re_path
 from .views import *
 
+
 urlpatterns = [
     path('', VisitorHome.as_view(), name='main'),
     # path('home/', home, name='home'),
@@ -26,6 +27,7 @@ urlpatterns = [
     path('contact/', Contact.as_view(), name='contact'),
     # path('login/', login, name='login'),
     path('login/', LogIn.as_view(), name='login'),
+    path('register/', RegisterUser.as_view(), name='register'),
     # path('news/<slug:news_slug>/', show_news, name='news'),
     path('news/<slug:news_slug>/', ShowNews.as_view(), name='news'),
     path('actors/', actors, name='actors'),
