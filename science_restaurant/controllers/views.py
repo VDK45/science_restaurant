@@ -80,7 +80,9 @@ class VisitorHome(DataMixin, ListView):
         return context
 
     def get_queryset(self):
-        return Visitor.objects.filter(is_published=True)
+        # select_related(key) для загрузки по внешнему ключу foreignkey
+        # prefetch_related(key) для загрузки по внешнему ключу many to many field
+        return Visitor.objects.filter(is_published=True).select_related('cat')  #
 
 
 class RestaurantCategory(DataMixin, ListView):
@@ -95,13 +97,16 @@ class RestaurantCategory(DataMixin, ListView):
         # context['menu'] = menu
         # context['title'] = 'Category -' + str(context['posts'][0].cat)
         # context['cat_selected'] = context['posts'][0].cat_id
-        c_def = self.get_user_context(title='Category -' + str(context['posts'][0].cat),
-                                      cat_selected=context['posts'][0].cat_id)
+        # c_def = self.get_user_context(title='Category -' + str(context['posts'][0].cat),
+        #                               cat_selected=context['posts'][0].cat_id)
+        c = Category.objects.get(slug=self.kwargs['cat_slug'])
+        c_def = self.get_user_context(title='Категория - ' + str(c.name),
+                                      cat_selected=c.pk)
         context = dict(list(context.items()) + list(c_def.items()))
         return context
 
     def get_queryset(self):
-        return Visitor.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True)
+        return Visitor.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True).select_related('cat')
 
 
 # def show_category(request, cat_id):
