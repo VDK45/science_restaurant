@@ -132,7 +132,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 # LOGIN_REDIRECT_URL = '/'
 
+# Debug
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+# Cache for windows
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'restaurant_cache'),
+    }
+}
+
+
 

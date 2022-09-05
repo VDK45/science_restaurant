@@ -1,9 +1,10 @@
 from django.urls import path, re_path
 from .views import *
+from django.views.decorators.cache import cache_page
 
 
 urlpatterns = [
-    path('', VisitorHome.as_view(), name='main'),
+    path('', VisitorHome.as_view(), name='main'),  # cache_page(60) 6o seconds
     # path('home/', home, name='home'),
     path('', VisitorHome.as_view(), name='home'),
     path('index/<int:index_id>/', index),  # http://127.0.0.1:8000/science_restaurant/index/45
@@ -32,10 +33,10 @@ urlpatterns = [
     path('register/', RegisterUser.as_view(), name='register'),
     # path('news/<slug:news_slug>/', show_news, name='news'),
     path('news/<slug:news_slug>/', ShowNews.as_view(), name='news'),
-    path('actors/', actors, name='actors'),
+    path('actors/', cache_page(60)(actors), name='actors'),
     path('billionaires/', billionaires, name='billionaires'),
     path('others/', others, name='others'),
     # path('category/<int:cat_id>/', show_category, name='category'),
-    path('category/<slug:cat_slug>/', RestaurantCategory.as_view(), name='category'),
+    path('category/<slug:cat_slug>/', cache_page(60)(RestaurantCategory.as_view()), name='category'),
 
 ]
