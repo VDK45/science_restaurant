@@ -16,7 +16,6 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-
 from controllers.views import *
 from science_restaurant import settings
 
@@ -24,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', home,),
     path('', include('controllers.urls')),
+    path('captcha/', include('captcha.urls')),
 ]
 
 # if settings.DEBUG:
