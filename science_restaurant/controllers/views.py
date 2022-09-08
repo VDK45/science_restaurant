@@ -165,7 +165,7 @@ class ShowNews(DataMixin, DetailView):
         context = super().get_context_data(**kwargs)
         # context['title'] = context['post']
         # context['menu'] = menu
-        c_def = self.get_user_context(title="Главная страница")
+        c_def = self.get_user_context(title=str('Visitor'))
         context = dict(list(context.items()) + list(c_def.items()))
         return context
 
@@ -271,7 +271,6 @@ class ContactFormView(DataMixin, FormView):
         return redirect('home')
 
 
-
 class Contact(DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'restaurant/contact.html'
@@ -285,16 +284,16 @@ class Contact(DataMixin, CreateView):
         return context
 
 
-def actors(request):
-    return HttpResponseNotFound('<h1> Страница Актёров </h1>')
-
-
-def billionaires(request):
-    return HttpResponseNotFound('<h1> Страница Миллионеры </h1>')
-
-
-def others(request):
-    return HttpResponseNotFound('<h1> Страница Others </h1>')
+# def actors(request):
+#     return HttpResponseNotFound('<h1> Страница Актёров </h1>')
+#
+#
+# def billionaires(request):
+#     return HttpResponseNotFound('<h1> Страница Миллионеры </h1>')
+#
+#
+# def others(request):
+#     return HttpResponseNotFound('<h1> Страница Others </h1>')
 
 
 class RegisterUser(DataMixin, CreateView):
@@ -314,8 +313,8 @@ class RegisterUser(DataMixin, CreateView):
         return redirect('home')
 
 
-class LoginUserForm:
-    pass
+# class LoginUserForm:
+#     pass
 
 
 class LoginUser(DataMixin, LoginView):

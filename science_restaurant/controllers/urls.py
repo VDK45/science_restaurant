@@ -34,9 +34,9 @@ urlpatterns = [
     path('register/', RegisterUser.as_view(), name='register'),
     # path('news/<slug:news_slug>/', show_news, name='news'),
     path('news/<slug:news_slug>/', ShowNews.as_view(), name='news'),
-    path('actors/', cache_page(60)(actors), name='actors'),
-    path('billionaires/', billionaires, name='billionaires'),
-    path('others/', others, name='others'),
+    # path('actors/', cache_page(60)(actors), name='actors'),
+    # path('billionaires/', billionaires, name='billionaires'),
+    # path('others/', others, name='others'),
     # path('category/<int:cat_id>/', show_category, name='category'),
     path('category/<slug:cat_slug>/', cache_page(60)(RestaurantCategory.as_view()), name='category'),
 

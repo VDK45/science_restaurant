@@ -27,10 +27,10 @@
 <!-- Login -->
 			<!--	скрыть/отобразить регистрацию и войти 		-->
 			{% if request.user.is_authenticated %}
-				<li class="last"> {{user.username}} | <a href="{% url 'logout' %}">Выйти</a></li>
-				{% else %}
-				<li class="last"><a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
-				{% endif %}
+			<li class="last"> {{user.username}} | <a href="{% url 'logout' %}">Выйти</a></li>
+			{% else %}
+			<li class="last"><a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
+			{% endif %}
 			</ul>
 			<div class="clear"></div>
 		</div>
@@ -53,15 +53,15 @@
 
 	<!--		{% show_categories 'name' cat_selected %}-->
 	{% for c in cats %}
-	<!--	Если есть запись	-->
-	{% if c.visitor__count > 0 %}
-		{% if c.pk == cat_selected %}
-		<li class="selected">{{c.name}}</li>
-		{% else %}
-		<li><a href="{{ c.get_absolute_url }}">{{c.name}}</a></li>
+		<!--	Если есть запись	-->
+		{% if c.visitor__count > 0 %}
+			{% if c.pk == cat_selected %}
+			<li class="selected">{{c.name}}</li>
+			{% else %}
+			<li><a href="{{ c.get_absolute_url }}">{{c.name}}</a></li>
+			{% endif %}
 		{% endif %}
-	{% endif %}
-{% endfor %}
+	{% endfor %}
 {% endcache %}
 
 		<li class="share">
